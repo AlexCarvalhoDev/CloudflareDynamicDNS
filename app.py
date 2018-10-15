@@ -1,4 +1,5 @@
 import requests
+import time
 
 EMAIL   = ""  # your clouflare login email
 KEY     = ""  # your cloudflare API key
@@ -38,8 +39,14 @@ if server_ip != cf_ip:
                  headers=login_headers,
                  json=data)
 
-new_cf_ip = requests.get('https://api.cloudflare.com/client/v4/zones/' + ZONE_ID + '/dns_records?type=' + TYPE + '&name=' + NAME,
-                         headers=login_headers)
-new_cf_ip = new_cf_ip.json()['result'][0]['content']
+    time.sleep(1)
 
-print 'New Cloudflare DNS IP Address: ' + new_cf_ip
+    new_cf_ip = requests.get('https://api.cloudflare.com/client/v4/zones/' + ZONE_ID + '/dns_records?type=' + TYPE + '&name=' + NAME,
+                             headers=login_headers)
+    new_cf_ip = new_cf_ip.json()['result'][0]['content']
+
+    print 'New Cloudflare DNS IP Address: ' + new_cf_ip
+
+else:
+    print 'The DNS IP is already up-to-date.'
+
